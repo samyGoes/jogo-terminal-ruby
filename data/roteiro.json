@@ -19,11 +19,68 @@
         "mensagem": "Fazendo o que?"
       },
       {
+        "nome": "Jogador",
         "escolhas": ["Deitado só", "Jogando papers please", "Fazendo nada"]
       },
       {
         "nome": "Amiga",
-        "mensagem": "HAHA"
+        "mensagem": "Eu não to fazendo nada faz um tempo já"
+      },
+      {
+        "nome": "Jogador",
+        "escolhas": ["Tendi", "Não vai estudar hoje?", "Quer jogar mais tarde?"]
+      },
+      {
+        "nome": "Amiga",
+        "respostas": ["pse", "Mó preguiça", "Bora"]
+      },
+      {
+        "opcoes_j": [
+          {
+            "nome": "Jogador",
+            "escolhas": ["Quer dar uma volta?", "To bem ocupado ultimamente"]
+          },
+          {
+            "nome": "Jogador",
+            "escolhas": ["Para de preguiça", "Posso te ajudar se quiser", "Vai repetir a matéria hein"]
+          },
+          {
+            "nome": "Jogador",
+            "escolhas": ["Lol?", "Don't Starve?", "Cuphead?"]
+          }
+        ]
+      },
+      {
+        "opcoes_a": [
+          {
+            "nome": "Amiga",
+            "respostas": ["Quero", "Complicado"]
+          },
+          {
+            "nome": "Amiga",
+            "respostas": ["Difícil", "Precisa n", "Não goura"]
+          },
+          {
+            "nome": "Amiga",
+            "respostas": ["Eca", "Perfeito", "Traumatizei"]
+          }
+        ]
+      },
+      {
+        "nome": "Jogador",
+        "mensagem": "Ou, já tava esquecendo do assunto principal"
+      },
+      {
+        "nome": "Amiga",
+        "mensagem": "E qual seria?"
+      },
+      {
+        "nome": "Jogador",
+        "escolhas": ["Tomei um tombasso hoje", "Terminei de ler Mimi no Kaidan, mt bom", "Tive um sonho muito estranho essa noite"]
+      },
+      {
+        "nome": "Amiga",
+        "respostas": ["Eita", "Falei q era", "Pior que eu também"]
       }
     ]
   ]

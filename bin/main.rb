@@ -1,10 +1,19 @@
 require_relative "../lib/classes/GerenciadorDialogo"
+require "io/console"
+require "pastel"
 
-i = 0
+pastel = Pastel.new
+
+puts pastel.on_magenta.white.bold("  APERTE ENTER PARA COMEÇAR  \n")
+dialogo = GerenciadorDialogo.new
 
 #MAIN LOOP
-while i < 5
-  dialogo = GerenciadorDialogo.new
-  dialogo.sistema_dialogo()
-  i = i + 1
+loop do
+  caractere = STDIN.getch
+  #puts "Você pressionou a tecla: '#{caractere}'"
+  
+  if caractere == "\r" or caractere == " "
+    dialogo.sistema_dialogo()
+  end
+
 end
