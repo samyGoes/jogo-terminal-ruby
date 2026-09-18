@@ -4,17 +4,14 @@
   "cenas": [
     [
       {
-        "id": 0,
         "nome": "Amiga",
         "mensagem": "Oi"
       },
       {
-        "id": 1,
         "nome": "Jogador",
         "mensagem": "Iae"
       },
       {
-        "id": 2,
         "nome": "Amiga",
         "mensagem": "Fazendo o que?"
       },

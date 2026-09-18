@@ -1,4 +1,5 @@
 {
-  "id": 0,
-  "i_escolha": 0
+  "i_fala": 0,
+  "i_escolha": 0,
+  "pocao_completa": false
 }
