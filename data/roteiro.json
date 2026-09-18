@@ -4,80 +4,60 @@
   "cenas": [
     [
       {
-        "nome": "Amiga",
-        "mensagem": "Oi"
+        "nome": "Irmã",
+        "mensagem": "Acordou bem cedo hoje."
       },
       {
-        "nome": "Jogador",
-        "mensagem": "Iae"
+        "nome": "Você",
+        "mensagem": "Sempre acordo cedo."
       },
       {
-        "nome": "Amiga",
-        "mensagem": "Fazendo o que?"
+        "nome": "Irmã",
+        "mensagem": "É, mas hoje foi mais que o normal."
       },
       {
-        "nome": "Jogador",
-        "escolhas": ["Deitado só", "Jogando papers please", "Fazendo nada"]
+        "nome": "Você",
+        "escolhas": ["Você não tem uma boa memória.", "Já esqueceu o que vamos fazer hoje?"]
       },
       {
-        "nome": "Amiga",
-        "mensagem": "Eu não to fazendo nada faz um tempo já"
+        "nome": "Irmã",
+        "mensagem": "...Ah, verdade, é hoje o dia de começar a fazer as encomendas absurdas."
       },
       {
-        "nome": "Jogador",
-        "escolhas": ["Tendi", "Não vai estudar hoje?", "Quer jogar mais tarde?"]
+        "nome": "Você",
+        "mensagem": "Não tem nada de absurdas. Por mais que eu nunca tenha feito nenhuma dessas poções, eu tenho um livro que vai me ajudar."
       },
       {
-        "nome": "Amiga",
-        "respostas": ["pse", "Mó preguiça", "Bora"]
+        "nome": "Irmã",
+        "mensagem": "E eu como sempre farei a base das poções..."
       },
       {
-        "opcoes_j": [
-          {
-            "nome": "Jogador",
-            "escolhas": ["Quer dar uma volta?", "To bem ocupado ultimamente"]
-          },
-          {
-            "nome": "Jogador",
-            "escolhas": ["Para de preguiça", "Posso te ajudar se quiser", "Vai repetir a matéria hein"]
-          },
-          {
-            "nome": "Jogador",
-            "escolhas": ["Lol?", "Don't Starve?", "Cuphead?"]
-          }
-        ]
+        "nome": "Você",
+        "escolhas": ["Exato.", "Não reclame."]
       },
       {
-        "opcoes_a": [
-          {
-            "nome": "Amiga",
-            "respostas": ["Quero", "Complicado"]
-          },
-          {
-            "nome": "Amiga",
-            "respostas": ["Difícil", "Precisa n", "Não goura"]
-          },
-          {
-            "nome": "Amiga",
-            "respostas": ["Eca", "Perfeito", "Traumatizei"]
-          }
-        ]
+        "nome": "Irmã",
+        "mensagem": "..."
       },
       {
-        "nome": "Jogador",
-        "mensagem": "Ou, já tava esquecendo do assunto principal"
+        "nome": "Você",
+        "mensagem": "Talvez algumas sejam complicadas de fazer, mas precisamos conseguir fazer uma por dia."
       },
       {
-        "nome": "Amiga",
-        "mensagem": "E qual seria?"
+        "nome": "Irmã",
+        "mensagem": "Olha, eu gosto de me desafiar, mas aceitar uma encomenda de poções que nunca fizemos não me parece uma boa ideia."
       },
       {
-        "nome": "Jogador",
-        "escolhas": ["Tomei um tombasso hoje", "Terminei de ler Mimi no Kaidan, mt bom", "Tive um sonho muito estranho essa noite"]
+        "nome":"Você",
+        "escolhas": ["Eu sei que vou conseguir fazê-las.", "Seus desafios parecem muito fracos então.", "O livro está em mãos, é só ler."]
       },
       {
-        "nome": "Amiga",
-        "respostas": ["Eita", "Falei q era", "Pior que eu também"]
+        "nome": "Irmã",
+        "respostas": ["Sempre tão confiante, chega a dar medo.", "Os seus que são sem noção.", "Ah sim, só ler."]
+      },
+      {
+        "nome": "Você",
+        "mensagem": "Enfim, chega de enrolação e venha ler o livro comigo."
       }
     ]
   ]
