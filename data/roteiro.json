@@ -57,7 +57,8 @@
       },
       {
         "nome": "Você",
-        "mensagem": "Enfim, chega de enrolação e venha ler o livro comigo."
+        "mensagem": "Enfim, chega de enrolação e venha ler o livro comigo.",
+        "livro": true
       }
     ]
   ]
