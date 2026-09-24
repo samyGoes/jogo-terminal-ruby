@@ -12,12 +12,14 @@ class Livro
     attr_accessor :livro_aberto
     attr_accessor :altura_pag
     attr_accessor :pag_3
+    attr_accessor :tutorial
 
     def initialize()
       self.pag_atual = 0
       self.livro_aberto = false
       self.altura_pag = 15
       self.pag_3 = false
+      self.tutorial = $salvamento["livro_tutorial"]
     end
 
     # Printa a página atual do livro.
@@ -122,7 +124,7 @@ class Livro
       # Se clicar no esc fecha o livro
       if @tecla == "\e" 
         self.livro_aberto = false
-        limpa_linhas(self.altura_pag + 1)
+        limpa_linhas(self.altura_pag + 2)
       
       # Voltando uma página
       elsif @tecla == "a" 
@@ -146,7 +148,20 @@ class Livro
           self.pag_atual = 3
         end
       end
+
+      # Para que o tutorial rode uma única vez
+      $salvamento["livro_tutorial"] = false
     end
+
+    # Printa uma explicação de como mexer no livro.
+    #
+    # @return [void]
+    def p_tutorial()
+      puts " Esc para sair do livro. \n A e D para mudar de página.\n".color("858585")
+    end
+
+
+    private
 
     # Verifica o maior nome de poção do livro e retorna a diferença de caracteres entre
     # ele e o nome do parâmetro.
@@ -200,6 +215,8 @@ class Livro
     #
     # @return [void]
     def limpa_linhas(qtd)
+      # Para apagar o tutorial
+      if self.tutorial then  IO.console.cursor_up(3)  end
       # Limpando a linha atual
       $stdout.print "\e[K"        
       qtd.times do

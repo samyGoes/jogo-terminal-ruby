@@ -1,5 +1,6 @@
 {
   "i_fala": 0,
   "i_escolha": 0,
-  "pocao_completa": false
+  "pocao_completa": false,
+  "livro_tutorial": true
 }

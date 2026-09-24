@@ -7,11 +7,11 @@ require_relative "Pocao"
 require_relative "Livro"
 $efeitos = include Efeitos
 
-$caminho_r = File.expand_path("../../data/roteiro.json", __dir__)
-$roteiro = JSON.load_file($caminho_r)
+caminho_r = File.expand_path("../../data/roteiro.json", __dir__)
+$roteiro = JSON.load_file(caminho_r)
 
-$caminho_s = File.expand_path("../../data/salvamento.json", __dir__)
-$salvamento = JSON.load_file($caminho_s)
+caminho_s = File.expand_path("../../data/salvamento.json", __dir__)
+$salvamento = JSON.load_file(caminho_s)
 
 class GerenciadorDialogo
     attr_accessor :i_fala
@@ -29,8 +29,8 @@ class GerenciadorDialogo
       self.qtd_falas = $roteiro["cenas"][0].length - 1
     end
 
-    # Sistema gerenciador de diálogo
-    # 
+    # Sistema gerenciador de diálogo.
+    #
     # @return [void]
     def sistema_dialogo()
       @dados = $roteiro["cenas"][0][self.i_fala]
@@ -90,18 +90,19 @@ class GerenciadorDialogo
         if @dados.dig("livro")
           @livro = Livro.new
           @livro.livro_aberto = true
+          if @livro.tutorial then  @livro.p_tutorial()  end
 
           loop do
             if @livro.livro_aberto == false then break end
-            @livro.mexe_no_livro()
             @livro.printa_pagina()
+            @livro.mexe_no_livro()        
           end
         end
         @pode_abrir_livro = true
-        @pocao = Pocao.new
+        #@pocao = Pocao.new
         # Se a poção não está completa então chama a função de fazer a poção
         if $salvamento["pocao_completa"] == false
-          @pocao.fazendo_pocao()            
+          #@pocao.fazendo_pocao()            
         else
         #Poção está completa
           puts "Poção completa, ir para próxima cena"
@@ -116,8 +117,10 @@ class GerenciadorDialogo
       return
     end
     
-    # Pega o índice da mensagem que o jogador escolheu e atribui ao atributo self.i_escolha
-    # 
+    private 
+
+    # Pega o índice da mensagem que o jogador escolheu e atribui ao atributo self.i_escolha.
+    #
     # return [void]
     def indice_msg(tipo)
       @i = 0
