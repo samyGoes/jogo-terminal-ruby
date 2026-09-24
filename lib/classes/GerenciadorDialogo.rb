@@ -99,16 +99,16 @@ class GerenciadorDialogo
           end
         end
         @pode_abrir_livro = true
-        #@pocao = Pocao.new
+        @pocao = Pocao.new
         # Se a poção não está completa então chama a função de fazer a poção
-        if $salvamento["pocao_completa"] == false
-          #@pocao.fazendo_pocao()            
+        if @pocao.pocao_completa == false
+          @pocao.fazendo_pocao()            
         else
         #Poção está completa
           puts "Poção completa, ir para próxima cena"
         end
       else
-        self.i_fala = self.i_fala + 1
+        self.i_fala += 1
         $salvamento["i_fala"] = self.i_fala
         #puts "atributo id: #{self.i_fala}"
         #puts "json id: #{$salvamento["i_fala"]}"
