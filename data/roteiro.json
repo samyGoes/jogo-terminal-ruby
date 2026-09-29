@@ -1,7 +1,7 @@
 {
   "language": "PT-BR",
   "version": "1.0.0",
-  "cenas": [
+  "dias": [
     [
       {
         "nome": "Irmã",
@@ -25,7 +25,7 @@
       },
       {
         "nome": "Você",
-        "mensagem": "Não tem nada de absurdas. Por mais que eu nunca tenha feito nenhuma dessas poções, eu tenho um livro que vai me ajudar."
+        "mensagem": "Não tem nada de absurdas, eu tenho um livro que vai me ajudar com as poções."
       },
       {
         "nome": "Irmã",
@@ -59,6 +59,66 @@
         "nome": "Você",
         "mensagem": "Enfim, chega de enrolação e venha ler o livro comigo.",
         "livro": true
+      },
+      {
+        "nome": "Você",
+        "escolhas": ["Não parece muito complicado.", "Acho que consigo dar conta.", "É, acho que vai dar certo."]
+      },
+      {
+        "nome": "Irmã",
+        "respostas": ["Não parece né...", "É, tenho que admitir que você sempre consegue.", "Assim espero."]
+      },
+      {
+        "nome": "Você",
+        "opcoes_j": [
+          ["Você é sempre muito medrosa.", "Você é muito pessimista.", "Não, não parece."],
+          ["Não é?", "Que bom que admitiu.", "Você consegue ser legal quando quer."],
+          ["Jogue fora a sua negatividade.", "Assim será.", "Logo logo estaremos aceitando mais encomendas."]
+        ]
+      },
+      {
+        "nome": "Irmã",
+        "opcoes_i": [
+          ["Eu sou precavida, é diferente.", "E você otimista até de mais.", "Se você diz."],
+          ["Calma, não se empolga.", "Não sou orgulhosa igual você.", "Eu sempre sou."],
+          ["Tentarei jogar uma parte, não prometo nada.", "Você realmente podia ser um pouco menos otimista as vezes.", "Dinheeeiro ieeee."]
+        ]
+      },
+      {
+        "nome": "Você",
+        "mensagem": [
+          ["Ah sim.", "Apenas confio no meu potencial.", "Só confia em mim."],
+          ["Hum.", "Eu não sou orgulhoso assim.", "(risos)."],
+          ["Ai ai...", "E você um pouco mais.", "Agora se animou né?"]
+        ]
+      },
+      {
+        "nome": "Você",
+        "mensagem": "Bom, vamos começar logo."
+      },
+      {
+        "nome": "Irmã",
+        "mensagem": "Tá, a primeira da lista é uma poção de restauração de madeira."
+      },
+      {
+        "nome": "Você",
+        "mensagem": "Ok, enquanto você faz a base vou dar uma olhada no livro pra ver sobre a segunda etapa.",
+        "livro": true
+      },
+      {
+        "nome": "Irmã",
+        "mensagem": "Base feita."
+      },
+      {
+        "nome": "Você",
+        "escolhas": ["Ótimo, darei sequência", "Ok, farei o resto agora."],
+        "pocao": true
+      }
+    ],
+    [
+      {
+        "nome": "Você",
+        "mensagem": "Ei, acorda logo."
       }
     ]
   ]
