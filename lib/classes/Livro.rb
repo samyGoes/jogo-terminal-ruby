@@ -124,7 +124,7 @@ class Livro
       # Se clicar no esc fecha o livro
       if @tecla == "\e" 
         self.livro_aberto = false
-        limpa_linhas(self.altura_pag + 2)
+        $efeitos.limpa_linhas(self.tutorial, self.altura_pag + 2)
       
       # Voltando uma página
       elsif @tecla == "a" 
@@ -209,24 +209,4 @@ class Livro
       return @espacos
     end
 
-    # Limpa determinada quantidade de linhas.
-    #
-    # @param qtd [Integer] Quantidade de linhas 
-    #
-    # @return [void]
-    def limpa_linhas(qtd)
-      # Para apagar o tutorial
-      if self.tutorial then  IO.console.cursor_up(3)  end
-      # Limpando a linha atual
-      $stdout.print "\e[K"        
-      qtd.times do
-        # Movendo o cursor 1 linha para baixo
-        IO.console.cursor_down(1)  
-        # Limpando o texto da linha
-        $stdout.print "\e[K"        
-      end
-      # Subindo todas as linhas
-      IO.console.cursor_up(qtd)
-    end
-    
 end

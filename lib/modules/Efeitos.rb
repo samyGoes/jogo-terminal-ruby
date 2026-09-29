@@ -3,9 +3,11 @@ require "io/console"
 module Efeitos
 
   # Printa um texto caractere por caractere (como se estivesse digitando).
-  # 
+  #
   # @param texto [String] O texto a ser escrito
+  #
   # @param velocidade [Number] Tempo que demorará para escrever o próximo caractere
+  #
   # @return [void]
   def maquina_texto(texto, velocidade = 0.05)
     @txt_l = texto.length
@@ -35,5 +37,26 @@ module Efeitos
     puts # Pula linha pro próximo texto
   end
 
+  # Limpa determinada quantidade de linhas.
+  #
+  # @param tutorial [Boolean] Caso seja usado para apagar o tutorial do livro.
+  #
+  # @param qtd [Integer] Quantidade de linhas 
+  #
+  # @return [void]
+  def limpa_linhas(tutorial, qtd)
+    # Para apagar o tutorial do livro
+    if tutorial then  IO.console.cursor_up(3)  end
+    # Limpando a linha atual
+    $stdout.print "\e[K"        
+    qtd.times do
+      # Movendo o cursor 1 linha para baixo
+      IO.console.cursor_down(1)  
+      # Limpando o texto da linha
+      $stdout.print "\e[K"        
+    end
+    # Subindo todas as linhas
+    IO.console.cursor_up(qtd)
+  end
 end
 
