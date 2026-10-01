@@ -11,24 +11,26 @@ caminho_r = File.expand_path("../../data/roteiro.json", __dir__)
 $roteiro = JSON.load_file(caminho_r)
 
 caminho_s = File.expand_path("../../data/salvamento.json", __dir__)
-$salvamento = JSON.load_file(caminho_s)
+$save = JSON.load_file(caminho_s)
 
 class GerenciadorDialogo
-    attr_accessor :i_fala
+    attr_accessor :dia
     attr_accessor :nome
     attr_accessor :mensagem
-    attr_accessor :dia
-    attr_accessor :i_escolha
     attr_accessor :qtd_falas
+    attr_accessor :i_fala
+    attr_accessor :i_escolha
     attr_accessor :pode_abrir_livro
+    attr_accessor :final_pocao_errada
 
     def initialize()
       @pode_abrir_livro = true
       @prompt = TTY::Prompt.new
-      self.i_fala = $salvamento["i_fala"]
-      self.dia = $salvamento["dia"]
+      self.i_fala = $save["i_fala"]
+      self.dia = $save["dia"]
       self.qtd_falas = $roteiro["dias"][self.dia].length - 1
       self.i_escolha = []
+      self.final_pocao_errada = false
     end
 
     # Sistema gerenciador de diálogo.
@@ -40,7 +42,7 @@ class GerenciadorDialogo
       # Atribuindo vo valores contidos nas chaves "nome" e "mensagem" aos atributos "nome" e "mensagem"
       self.nome, self.mensagem = @dados.values_at("nome", "mensagem")
 
-      # PRINTANDO A MENSAGEN
+      # PRINTANDO A MENSAGEN E OS NOMES
       if self.mensagem != nil      
         # PRINTANDO O NOME DE QUEM MANDOU A MENSAGEM
         case self.nome
@@ -50,7 +52,14 @@ class GerenciadorDialogo
 
         # Verificando se o valor do atributo "mensagem" é um array ou não
         if self.mensagem.is_a?(Array)
-          $efeitos.maquina_texto(self.mensagem[self.i_escolha[0]][self.i_escolha[1]])
+          # Verificando se é um array 2d
+          if self.mensagem.any?(Array)
+            $efeitos.maquina_texto(self.mensagem[self.i_escolha[0]][self.i_escolha[1]])
+          # ou um array 1d
+          else
+            $efeitos.maquina_texto(self.mensagem[self.i_escolha[0]])
+          end
+        # Se for apenas uma String
         else
           $efeitos.maquina_texto(self.mensagem)
         end
@@ -105,31 +114,27 @@ class GerenciadorDialogo
       # Verificando se é para fazer a poção naquele momento
       if @dados.dig("pocao")
         @pocao = Pocao.new
-        # Se a poção não está completa então chama a função de fazer a poção novamente
-        if @pocao.pocao_completa == false
-          @pocao.fazendo_pocao()            
-        else
-        #Poção está completa
-          puts "Poção completa, ir para próxima cena"
-        end
+        @p = @pocao.fazendo_pocao()
+        if @p == :final then  self.final_pocao_errada = true  end            
+        #puts "retorno: #{@p}"
       end
 
       # Quando acabar as falas do dia passa para o próxima dia
       if self.i_fala == self.qtd_falas 
         #if $roteiro["dias"].length + 1 != nil
-          self.dia += 1
-          $salvamento["dia"] = self.dia
+          self.dia += 1   
           self.i_fala = 0
-          $salvamento["i_fala"] = self.i_fala
+          
         #end
       # Ainda não acabou as falas do dia, então passa pra próxima fala 
       else
         self.i_fala += 1
-        $salvamento["i_fala"] = self.i_fala
       end
 
+      salva_dados()
       return
     end
+    
     
     private 
 
@@ -157,9 +162,14 @@ class GerenciadorDialogo
       end
     end
 
-    def salva_dados(caminho, arquivo)
-      File.open(caminho, "w") do |f|
-        f.write(JSON.pretty_generate(arquivo))
-      end
+    def salva_dados()
+      $save["dia"] = self.dia
+      $save["i_fala"] = self.i_fala
     end
+
+    # def cria_save(caminho, arquivo)
+    #   File.open(caminho, "w") do |f|
+    #     f.write(JSON.pretty_generate(arquivo))
+    #   end
+    # end
 end

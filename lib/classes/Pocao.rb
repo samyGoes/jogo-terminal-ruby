@@ -2,22 +2,24 @@ require "tty-prompt"
 require "json"
 require_relative "Livro"
 require "io/console"
+require "rainbow/refinement"
+using Rainbow
 
 class Pocao
   attr_accessor :etapa
   attr_accessor :pocao_atual
-  attr_accessor :pocao_completa
+  attr_accessor :pode_errar
 
   def initialize()
     @prompt = TTY::Prompt.new
     self.etapa = 2
-    self.pocao_completa = $salvamento["pocao_completa"]
-    self.pocao_atual = $salvamento["pocao_atual"]
+    self.pocao_atual = $save["pocao_atual"]
+    self.pode_errar = 2
   end
 
   # Puzzle das poções. Abre as opções pro jogador responder e selecionar respostas da poção atual.
   #
-  # @return [void]
+  # @return [String]
   def fazendo_pocao()
     case self.etapa
       when 2
@@ -26,11 +28,14 @@ class Pocao
           @resp = @prompt.ask("#{$livro["pocoes"][0][self.pocao_atual]["nome"]} [2° Etapa]:")
           puts "\n"
           # Se a resposta do jogador for igual a resposta do puzzle
-          if @resp.to_i == $livro["resp_puzzle"][self.pocao_atual][0]
+          if @resp.to_i == $livro["pocoes"][0][self.pocao_atual]["resp"][0]
             self.etapa = 3
             fazendo_pocao()
           else 
-            puts $efeitos.maquina_texto("Hm... acho que não é bem isso.")
+            print "Você ".color("9046FF")
+            # Randomizando a mensagem do jogador falando que algo deu errado
+            print $efeitos.maquina_texto($roteiro["resp_erro"][rand(3)])
+            puts "\n"
             abrir_livro_ou_fazer_pocao(5)       
           end
       when 3
@@ -39,12 +44,15 @@ class Pocao
           @resp = @prompt.ask("#{$livro["pocoes"][0][self.pocao_atual]["nome"]} [3° Etapa]:")
           puts "\n"
           # Se a resposta do jogador for igual a resposta do puzzle
-          if @resp.to_i == $livro["resp_puzzle"][self.pocao_atual][1]
+          if @resp.to_i == $livro["pocoes"][0][self.pocao_atual]["resp"][1]
             self.etapa = 4
             fazendo_pocao()
           else 
-            puts $efeitos.maquina_texto("Hm... acho que não é bem isso.")
-            abrir_livro_ou_fazer_pocao(5)
+            print "Você ".color("9046FF")
+            # Randomizando a mensagem do jogador falando que algo deu errado
+            print $efeitos.maquina_texto($roteiro["resp_erro"][rand(3)])
+            puts "\n"
+            abrir_livro_ou_fazer_pocao(5)    
           end   
       when 4 
           # Ocultando cursor
@@ -59,8 +67,10 @@ class Pocao
           end
           
           # Select para escolher qual poção você quer combinar com a anterior
-          #puts "Vetor pocoes_2: #{@pocoes_2}\n"
-          @pocao_escolhida = @prompt.select("Qual poção deseja combinar? ", @pocoes_2)
+          @pocao_escolhida = @prompt.select("Qual poção deseja combinar? ", @pocoes_2,
+                                            cycle: true,
+                                            help: "Use as setas",
+                                            active_color: :white)
           puts "\n"
 
           # Pegando o índice da poção escolhida
@@ -71,16 +81,53 @@ class Pocao
           end
 
           # Select para escolher a resposta da poção selecionada
-          @resp = @prompt.select(@pocao_escolhida + $livro["pocoes"][3][@indice_pocao_escolhida]["etapa-1"], $livro["pocoes"][3][@indice_pocao_escolhida]["opcoes_resp"])
+          @resp = @prompt.select(@pocao_escolhida + $livro["pocoes"][3][@indice_pocao_escolhida]["etapa-1"], $livro["pocoes"][3][@indice_pocao_escolhida]["opcoes_resp"],
+                                  cycle: true,
+                                  help: "Use as setas",
+                                  active_color: :white)
           puts "\n"
-          if @resp == $livro["resp_puzzle"][self.pocao_atual][2]
-            $salvamento["pocao_completa"] = true
-            $salvamento["pocao_atual"] += 1
-            return
+          # Retirando uma parte do nome da poção escolhida
+          @p = @pocao_escolhida.sub("Poção ", "")
+
+          # Se a resposta para o puzzle da poção escolhida estiver correta
+          if @resp == $livro["pocoes"][3][@indice_pocao_escolhida]["resp"]     
+            # Se a combinação final das poções estiver correta
+            if verifica_pocao_final(@p)
+              self.pocao_atual += 1
+              $save["pocao_atual"] = self.pocao_atual
+  
+              IO.console.cursor_up(8)
+              $efeitos.limpa_linhas(false, 8)
+              return
+            # Resposta correta, porém combinação errada
+            else
+              self.pode_errar -= 1
+              # Você errou a combinação das poções duas vezes
+              if self.pode_errar == 0
+                puts $efeitos.maquina_texto($roteiro["finais"][0])
+                return :final
+              end
+
+              # Você errou a combinação das poções uma vez
+              print "Você ".color("9046FF")
+              # Randomizando a mensagem do jogador falando que a combinação das poções está errada
+              print $efeitos.maquina_texto($roteiro["resp_c_erro"][rand(3)])
+              puts "\n"
+              sleep(0.6)
+              print "Você ".color("9046FF")
+              print $efeitos.maquina_texto("Gastei muito tempo fazendo uma poção errada, só tenho tempo para tentar fazer mais uma poção completa.")
+              puts "\n"
+              
+              abrir_livro_ou_fazer_pocao(10)  
+            end  
+          # Resposta errada
           else
-            puts $efeitos.maquina_texto("Hm... acho que não é bem isso.")
-            abrir_livro_ou_fazer_pocao(7)
-          end
+            print "Você ".color("9046FF")
+            # Randomizando a mensagem do jogador falando que algo deu errado
+            print $efeitos.maquina_texto($roteiro["resp_erro"][rand(3)])
+            puts "\n"
+            abrir_livro_ou_fazer_pocao(7)    
+          end       
     end
   end
 
@@ -117,4 +164,18 @@ class Pocao
       when "Preparar a poção" then  fazendo_pocao()
     end
   end
+
+  # Verifica se a poção final está correta (se a combinação das poções foi a necessária).
+  #
+  # @param pocao [String] Nome da poção escolhida.
+  #
+  # @return [Boolean]
+  def verifica_pocao_final(pocao)
+    if $livro["encomenda"][self.pocao_atual].include?(pocao) then  
+      return true  
+    end
+    
+    return false  
+  end
+
 end

@@ -19,7 +19,7 @@ class Livro
       self.livro_aberto = false
       self.altura_pag = 15
       self.pag_3 = false
-      self.tutorial = $salvamento["livro_tutorial"]
+      self.tutorial = $save["livro_tutorial"]
     end
 
     # Printa a página atual do livro.
@@ -150,7 +150,7 @@ class Livro
       end
 
       # Para que o tutorial rode uma única vez
-      $salvamento["livro_tutorial"] = false
+      $save["livro_tutorial"] = false
     end
 
     # Printa uma explicação de como mexer no livro.
