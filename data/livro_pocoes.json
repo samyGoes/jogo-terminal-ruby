@@ -1,21 +1,20 @@
 {
-    "resp_puzzle": [
-        [2, 48, "//--//"],
-        [7, 102, "++-+"]
-    ],
+    "encomenda": ["Poção de restauração de madeira", "Poção de cura da água"],
     "pocoes": [
        [
         {
             "nome": "Poção de cura",
             "etapa-2": [" 1 ", " 3 ", " 5 "],
             "etapa-3": " ABHJ! ",
-            "cores": ["dc6771", "7209b7", "89023e", "13505b", "68d6f8"]
+            "cores": ["dc6771", "7209b7", "89023e", "13505b", "68d6f8"],
+            "resp": [2, 48]
         },
         {
             "nome": "Poção de fogo",
             "etapa-2": [" 34 ", " 3 ", " 5 "],
             "etapa-3": " ABHJ! ",
-            "cores": ["dc6771", "89023e", "89023e", "13505b", "68d6f8"]
+            "cores": ["dc6771", "89023e", "89023e", "13505b", "68d6f8"],
+            "resp": [7, 102]
         },
         {
             "nome": "Poção de restauração",
@@ -47,13 +46,15 @@
             "nome": "Poção madeira",
             "etapa-1": " 2 //-- ",
             "cor": "13505b",
-            "opcoes_resp": ["//--//", "//---/", "//--/-"]
+            "opcoes_resp": ["//--//", "//---/", "//--/-"],
+            "resp": "//--//"
         },
         {
             "nome": "Poção água",
             "etapa-1": " 1 ++- ",
             "cor": "89023e",
-            "opcoes_resp": ["++-+", "++--", "++---"]
+            "opcoes_resp": ["++-+", "++--", "++---"],
+            "resp": "++--"
         }
        ]
     ]

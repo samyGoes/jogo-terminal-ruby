@@ -1,6 +1,15 @@
 {
   "language": "PT-BR",
   "version": "1.0.0",
+
+  "resp_erro": ["Hm... acho que não é bem isso.", "Sinto que fiz algo errado...", "Droga, não deu certo."],
+  "resp_c_erro": ["Ah, eu fiz a poção errada.", "Não era essa a poção que eu devia ter feito...", "...Combinei as poções erradas."],
+
+  "finais": [
+    "Você gastou tempo de mais fazendo poções erradas e percebeu que não conseguiria fazer todas a tempo. Você resolveu cancelar a encomenda.",
+    "",
+    ""
+  ],
   "dias": [
     [
       {
@@ -113,6 +122,18 @@
         "nome": "Você",
         "escolhas": ["Ótimo, darei sequência", "Ok, farei o resto agora."],
         "pocao": true
+      },
+      {
+        "nome": "Você",
+        "escolhas": ["Foi um pouco mais difícil do que pensei.", "Foi como eu esperava.", "Foi muito simples fazê-la."]
+      },
+      {
+        "nome": "Irmã",
+        "respostas": ["Isso me deixa um pouco preocupada em relação as outras.", "Certeza?", "Pare de se gabar."]
+      },
+      {
+        "nome": "Você",
+        "mensagem": ["Relaxa, foi um pouco difícil, mas eu consegui não é?", "Sim, não foi mada de mais.", "Estou apenas dizendo a verdade."]
       }
     ],
     [
