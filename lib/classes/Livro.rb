@@ -38,11 +38,22 @@ class Livro
                 @titulo = espacos(alinhamento(0, @pag_1[i]["nome"])[1]) + "  Base    2° Etapa    3° Etapa \n\n"
 
                 @pocoes += 
-                @pag_1[i]["nome"] + espacos(alinhamento(0, @pag_1[i]["nome"])[0]) + "   " + "   ".bg(@pag_1[i]["cores"][0]) + "   " +
-                @pag_1[i]["etapa-2"][0].bg(@pag_1[i]["cores"][1]) + " " +
-                @pag_1[i]["etapa-2"][1].bg(@pag_1[i]["cores"][2]) + " " +
-                @pag_1[i]["etapa-2"][2].bg(@pag_1[i]["cores"][3]) + "   " +
-                @pag_1[i]["etapa-3"].bg(@pag_1[i]["cores"][4]).color("000000") + "\n\n"
+                # Printando de acordo com a poção atual (oculta os dados das outras poções que você fará
+                # posteriormente)
+                @pag_1[i]["nome"] + espacos(alinhamento(0, @pag_1[i]["nome"])[0]) + "   " + "   ".bg(@pag_1[i]["cores"][0]) + "   "
+                if i <= $save["pocao_atual"]
+                  @pocoes +=
+                  @pag_1[i]["etapa-2"][0].bg(@pag_1[i]["cores"][1]) + " " +
+                  @pag_1[i]["etapa-2"][1].bg(@pag_1[i]["cores"][2]) + " " +
+                  @pag_1[i]["etapa-2"][2].bg(@pag_1[i]["cores"][3]) + "   " +
+                  @pag_1[i]["etapa-3"].bg(@pag_1[i]["cores"][4]).color("000000") + "\n\n"
+                else
+                  @pocoes +=
+                  "   ".bg(@pag_1[i]["cores"][1]) + " " +
+                  "   ".bg(@pag_1[i]["cores"][2]) + " " +
+                  "   ".bg(@pag_1[i]["cores"][3]) + "   " +
+                  "       ".bg(@pag_1[i]["cores"][4]).color("000000") + "\n\n"  
+                end
               end
               # Variável com toda a string sobre as poções para o box
               @titulo + @pocoes

@@ -5,6 +5,7 @@ require "tty-prompt"
 require_relative "../modules/Efeitos"
 require_relative "Pocao"
 require_relative "Livro"
+require "tty-font"
 $efeitos = include Efeitos
 
 caminho_r = File.expand_path("../../data/roteiro.json", __dir__)
@@ -20,17 +21,18 @@ class GerenciadorDialogo
     attr_accessor :qtd_falas
     attr_accessor :i_fala
     attr_accessor :i_escolha
-    attr_accessor :pode_abrir_livro
     attr_accessor :final_pocao_errada
+    attr_accessor :dia_1
 
     def initialize()
-      @pode_abrir_livro = true
       @prompt = TTY::Prompt.new
+      @font = TTY::Font.new(:doom)
       self.i_fala = $save["i_fala"]
       self.dia = $save["dia"]
       self.qtd_falas = $roteiro["dias"][self.dia].length - 1
       self.i_escolha = []
       self.final_pocao_errada = false
+      self.dia_1 = true
     end
 
     # Sistema gerenciador de diálogo.
@@ -38,6 +40,11 @@ class GerenciadorDialogo
     # @return [void]
     def sistema_dialogo()
       @dados = $roteiro["dias"][self.dia][self.i_fala]
+
+      if self.dia_1
+        $efeitos.maquina_texto(@font.write("  DIA    " + (self.dia + 1).to_s).color("7209b7"), 0.0009 , false)
+        self.dia_1 = false
+      end
 
       # Atribuindo vo valores contidos nas chaves "nome" e "mensagem" aos atributos "nome" e "mensagem"
       self.nome, self.mensagem = @dados.values_at("nome", "mensagem")
@@ -121,11 +128,10 @@ class GerenciadorDialogo
 
       # Quando acabar as falas do dia passa para o próxima dia
       if self.i_fala == self.qtd_falas 
-        #if $roteiro["dias"].length + 1 != nil
-          self.dia += 1   
-          self.i_fala = 0
-          
-        #end
+        self.dia += 1   
+        self.i_fala = 0
+        sleep(0.8)
+        $efeitos.maquina_texto(@font.write("  DIA   " + (self.dia + 1).to_s).color("7209b7"), 0.0009 , false)
       # Ainda não acabou as falas do dia, então passa pra próxima fala 
       else
         self.i_fala += 1
