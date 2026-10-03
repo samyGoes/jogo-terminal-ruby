@@ -134,6 +134,18 @@
       {
         "nome": "Você",
         "mensagem": ["Relaxa, foi um pouco difícil, mas eu consegui não é?", "Sim, não foi mada de mais.", "Estou apenas dizendo a verdade."]
+      },
+      {
+        "nome": "Irmã",
+        "mensagem": "Bom, poção de hoje feita, irei dormir agora."
+      },
+      {
+        "nome": "Irmã",
+        "mensagem": "Boa noite."
+      },
+      {
+        "nome": "Você",
+        "mensagem": "Boa noite."
       }
     ],
     [
