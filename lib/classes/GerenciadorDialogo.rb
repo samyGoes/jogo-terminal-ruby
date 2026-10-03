@@ -2,11 +2,9 @@ require "json"
 require 'rainbow/refinement'
 using Rainbow
 require "tty-prompt"
-require_relative "../modules/Efeitos"
+require "tty-font"
 require_relative "Pocao"
 require_relative "Livro"
-require "tty-font"
-$efeitos = include Efeitos
 
 caminho_r = File.expand_path("../../data/roteiro.json", __dir__)
 $roteiro = JSON.load_file(caminho_r)
@@ -25,7 +23,7 @@ class GerenciadorDialogo
     attr_accessor :dia_1
 
     def initialize()
-      @prompt = TTY::Prompt.new
+      @prompt = TTY::Prompt.new(quiet: true)
       @font = TTY::Font.new(:doom)
       self.i_fala = $save["i_fala"]
       self.dia = $save["dia"]
@@ -74,10 +72,15 @@ class GerenciadorDialogo
       
       elsif @dados.dig("escolhas") 
         # CRIA UM SELECT COM SUAS ESCOLHAS DE RESPOSTA
-        self.mensagem = @prompt.select(self.nome.color("9046FF"), @dados["escolhas"],
-                                        cycle: true,
-                                        help: "Use as setas",
-                                        active_color: :white)
+        self.mensagem = @prompt.select(self.nome.color("9046FF"), @dados["escolhas"], 
+                                        cycle: true, 
+                                        help: "Use as setas", 
+                                        active_color: ->(str) { (str).color("9046FF") },
+                                        symbols: { marker: "" })
+        # Deixando o cursor oculto
+        $stdout.print "\e[?25l"
+        print self.nome.color("9046FF") + " "
+        $efeitos.maquina_texto(self.mensagem)
         puts "\n"
         indice_msg("e")
         
@@ -93,7 +96,12 @@ class GerenciadorDialogo
         self.mensagem = @prompt.select(self.nome.color("9046FF"), @dados["opcoes_j"][self.i_escolha[0]],
                                     cycle: true,
                                     help: "Use as setas",
-                                    active_color: :white)
+                                    active_color: ->(str) { (str).color("9046FF") },
+                                    symbols: { marker: "" })
+        # Deixando o cursor oculto
+        $stdout.print "\e[?25l"
+        print self.nome.color("9046FF") + " "
+        $efeitos.maquina_texto(self.mensagem)
         puts "\n"
         indice_msg("o")
 
