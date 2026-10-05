@@ -1,5 +1,5 @@
 {
-    "encomenda": ["Poção de restauração de madeira", "Poção de cura da água"],
+    "encomenda": ["Poção de cura de madeira", "Poção de cura da água"],
     "pocoes": [
        [
         {
@@ -7,7 +7,7 @@
             "etapa-2": [" 1 ", " 3 ", " 5 "],
             "etapa-3": " ABHJ! ",
             "cores": ["dc6771", "7209b7", "89023e", "13505b", "68d6f8"],
-            "resp": [2, 48]
+            "resp": [2, 21]
         },
         {
             "nome": "Poção de fogo",
