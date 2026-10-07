@@ -29,18 +29,18 @@ class Livro
       if self.livro_aberto
         case self.pag_atual
           when 0 # Página 1
+            @nome_maior = nome_maior_pocao(0)
             @pag_1 = $livro["pocoes"][0]
             @pocoes = ""
             @box = TTY::Box.frame(width: TTY::Screen.width, height: self.altura_pag, padding: [1,2], title: {top_left: "LIVRO DE POÇÕES", bottom_right: "pag 1"}) do
-              
+                        
+              @titulo = espacos(@nome_maior) + "  Base    2° Etapa    3° Etapa \n\n"
               # Pegando as informações de cada poção da página 1
-              0.upto(@pag_1.length - 1) do | i |
-                @titulo = espacos(alinhamento(0, @pag_1[i]["nome"])[1]) + "  Base    2° Etapa    3° Etapa \n\n"
-
+              (@pag_1.length).times do | i |
                 @pocoes += 
                 # Printando de acordo com a poção atual (oculta os dados das outras poções que você fará
                 # posteriormente)
-                @pag_1[i]["nome"] + espacos(alinhamento(0, @pag_1[i]["nome"])[0]) + "   " + "   ".bg(@pag_1[i]["cores"][0]) + "   "
+                @pag_1[i]["nome"] + espacos(alinhamento(@nome_maior, @pag_1[i]["nome"].length)) + "   " + "   ".bg(@pag_1[i]["cores"][0]) + "   "
                 if i <= $save["pocao_atual"]
                   @pocoes +=
                   @pag_1[i]["etapa-2"][0].bg(@pag_1[i]["cores"][1]) + " " +
@@ -106,13 +106,14 @@ class Livro
             # Subindo o cursor até o topo da pagina
             IO.console.cursor_up(self.altura_pag + 1)
           when 3 # Página 4
+            @nome_maior = nome_maior_pocao(3)
             @pag_4 = $livro["pocoes"][3]
             @pocoes = ""
             @box = TTY::Box.frame(width: TTY::Screen.width, height: self.altura_pag, padding: [1,2],title: {top_left: "LIVRO DE POÇÕES", bottom_right: "pag 4"}) do
               # Pegando as informações de cada poção da página 4
-              0.upto(@pag_4.length - 1) do | i |
+              (@pag_4.length).times do | i |
                 @pocoes += 
-                @pag_4[i]["nome"] + espacos(alinhamento(3, @pag_4[i]["nome"])[0]) + "   " + 
+                @pag_4[i]["nome"] + espacos(alinhamento(@nome_maior, @pag_4[i]["nome"].length)) + "   " + 
                 @pag_4[i]["etapa-1"].bg(@pag_4[i]["cor"]) + "\n\n"
               end
               # Variável com toda a string sobre as poções para o box
@@ -174,39 +175,34 @@ class Livro
 
     private
 
-    # Verifica o maior nome de poção do livro e retorna a diferença de caracteres entre
-    # ele e o nome do parâmetro.
+    # Verifica o maior nome de poção do livro e retorna a quantidade de caracteres dele.
     #
     # @param pag [Integer] Índice da página do JSON que irá buscar o nome
     #
-    # @param nome [String] Nome que será comparado
-    #
     # @return [Integer] 
-    def alinhamento(pag, nome)
-      @nome_maior = 0
-      @espaco = 0
+    def nome_maior_pocao(pag)
+      @pocoes = []
 
-      0.upto($livro["pocoes"][pag].length - 1) do | i |
-        @atual_nome_p = $livro["pocoes"][pag][i]["nome"].length
-        
-        # Evitando de acessar um valor nulo
-        if $livro["pocoes"][pag][i + 1] == nil 
-          break
-        else
-          # Acessando o nome posterior ao atual
-          @prox_nome_p = $livro["pocoes"][pag][i + 1]["nome"].length
-
-          if @atual_nome_p > @prox_nome_p
-            @nome_maior = @atual_nome_p
-          else
-            @nome_maior = @prox_nome_p
-          end
-        end
+      # Guardando os nomes das poções 
+      ($livro["pocoes"][pag].length).times do | i |
+        @pocoes[i] = $livro["pocoes"][pag][i]["nome"]
       end
+      # Pegando o maior nome
+      @nome_maior = @pocoes.max_by(&:length).length
+      return @nome_maior
+    end
 
-      @espaco = @nome_maior - nome.length
-      #puts "\n Nome maior: #{@nome_maior} \n Nome param: #{nome.length} \n Espaços necessários: #{@espaco}"
-      return [@espaco, @nome_maior]
+    # Subtrai o nome_maior pelo nome_atual, o resultado sendo a quantidade de espaços necessários.
+    #
+    # @param nome_maior [Integer] Passar o resultado da função nome_maior_pocao()
+    #
+    # @param nome_atual [Integer] A quantidade de caracteres do outro nome
+    #
+    # @return [Integer]
+    def alinhamento(nome_maior, nome_atual)
+      @espaco = nome_maior - nome_atual
+      #puts "nome atual: #{nome_atual} espaço necessário: #{@espaco}"
+      return @espaco
     end
 
     # Preenche uma variável com determinada quantidade de espaços em branco.
