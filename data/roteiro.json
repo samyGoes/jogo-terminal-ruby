@@ -7,7 +7,7 @@
 
   "finais": [
     "Você gastou tempo de mais fazendo poções erradas e percebeu que não conseguiria fazer todas a tempo. Você resolveu cancelar a encomenda.",
-    "",
+    "Sua irmã acabou errando a base. Você tentou fazer a poção sem nenhum erro, mas não conseguiu.",
     ""
   ],
   "dias": [
@@ -152,6 +152,77 @@
       {
         "nome": "Você",
         "mensagem": "Ei, acorda logo."
+      },
+      {
+        "nome": "Irmã",
+        "mensagem": "Achei uma página aqui q pode te ajudar."
+      },
+      {
+        "nome": "Você",
+        "escolhas": ["Já tenho tudo que preciso, infomações desnecessárias vão só atrapalhar.", "Uma página solta?"],
+        "evento": "pagina"
+      },
+      {
+        "nome": "Irmã",
+        "respostas": ["Você que sabe.", "Sim, dá uma olhada."],
+        "livro": null
+      },
+      {
+        "nome": "Você",
+        "mensagem": "É, vai ser bem útil."
+      },
+      {
+        "nome": "Irmã",
+        "mensagem": "Viu, eu também sou."
+      },
+      {
+        "nome": "Você",
+        "escolhas": ["É, as vezes sim.", "Preciso nem citar quantas vezes você já perdeu coisas importantes né?"],
+        "evento": "errar base"
+      },
+      {
+        "nome": "Irmã",
+        "respostas": ["hihi", "..."]
+      },
+      {
+        "nome": "Você",
+        "mensagem": "Comece a fazer a base logo."
+      },
+      {
+        "nome": "Irmã",
+        "respostas": ["Certo.", "Sim, já vou fazer."]
+      },
+      {
+        "nome": "Você",
+        "mensagem": ["Pronto?", "Por que tá demorando tanto?"]
+      },
+      {
+        "nome": "Irmã",
+        "respostas": ["Sim, base pronta.", "...Acho que eu fiz algo errado."]
+      },
+      {
+        "nome": "Você",
+        "opcoes_j": [
+          ["Ótimo", "Ok."],
+          ["Você demorou esse tempo todo pra fazer errado ainda?", "É sério? Nós já estamos atrasados."]
+        ]
+      },
+      {
+        "nome": "Irmã",
+        "respostas": ["iee.", "...Foi mal."]
+      },
+      {
+        "nome": "Você",
+        "mensagem": ["iee.", "Faça denovo, dessa vez eu vou supervisionar."]
+      },
+      {
+        "nome": "Você",
+        "mensagem": "Farei a poção agora.",
+        "pocao": true
+      },
+      {
+        "nome": "Você",
+        "mensagem": "Consegui."
       }
     ]
   ]
