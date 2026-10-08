@@ -50,7 +50,7 @@ class Menu
           # Pega a tecla apertada
           @caractere = STDIN.getch
           # Se clicar enter ou espaço chama o gerenciador de diálogo
-          if @caractere == "\r" or @caractere == " " and @dialogo.final_pocao_errada == false
+          if @caractere == "\r" or @caractere == " " and @dialogo.final == false
             @dialogo.sistema_dialogo()
           end          
 

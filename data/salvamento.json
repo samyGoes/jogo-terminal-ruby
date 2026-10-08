@@ -1,8 +1,10 @@
 {
-  "dia": 0,
+  "dia": 1,
   "i_fala": 0,
   "i_escolha": 0,
   "livro_tutorial": true,
+  "pag_3": false,
   "pocao_atual": 0,
-  "pode_errar_pocao": 2
+  "pode_errar_pocao": true,
+  "chances": 2
 }

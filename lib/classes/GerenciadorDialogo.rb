@@ -19,8 +19,9 @@ class GerenciadorDialogo
     attr_accessor :qtd_falas
     attr_accessor :i_fala
     attr_accessor :i_escolha
-    attr_accessor :final_pocao_errada
+    attr_accessor :final
     attr_accessor :dia_1
+    attr_accessor :evento
 
     def initialize()
       @prompt = TTY::Prompt.new(quiet: true)
@@ -29,7 +30,7 @@ class GerenciadorDialogo
       self.dia = $save["dia"]
       self.qtd_falas = $roteiro["dias"][self.dia].length - 1
       self.i_escolha = []
-      self.final_pocao_errada = false
+      self.final = false
       self.dia_1 = true
     end
 
@@ -70,7 +71,7 @@ class GerenciadorDialogo
         end
         puts "\n"
       
-      elsif @dados.dig("escolhas") 
+      elsif @dados.key?("escolhas") 
         # CRIA UM SELECT COM SUAS ESCOLHAS DE RESPOSTA
         self.mensagem = @prompt.select(self.nome.color("9046FF"), @dados["escolhas"], 
                                         cycle: true, 
@@ -84,14 +85,14 @@ class GerenciadorDialogo
         puts "\n"
         indice_msg("e")
         
-      elsif @dados.dig("respostas") 
+      elsif @dados.key?("respostas") 
         # IRMÃ RESPONDE DE ACORDO COM A SUA ESCOLHA ANTERIOR
         print self.nome.color("5DB7DE") + " "
         self.mensagem = @dados["respostas"][self.i_escolha[0]]
         $efeitos.maquina_texto(self.mensagem)
         puts "\n"
         
-      elsif @dados.dig("opcoes_j")
+      elsif @dados.key?("opcoes_j")
          # CRIA UM SELECT COM SUAS ESCOLHAS DE RESPOSTA BASEADAS NA RESPOTA DA SUA AMIGA
         self.mensagem = @prompt.select(self.nome.color("9046FF"), @dados["opcoes_j"][self.i_escolha[0]],
                                     cycle: true,
@@ -105,7 +106,7 @@ class GerenciadorDialogo
         puts "\n"
         indice_msg("o")
 
-      elsif @dados.dig("opcoes_i")
+      elsif @dados.key?("opcoes_i")
         # IRMÃ RESPONDE DE ACORDO COM A SUA ESCOLHA ANTERIOR
         print self.nome.color("5DB7DE") + " "
         self.mensagem = @dados["opcoes_i"][self.i_escolha[0]][self.i_escolha[1]]
@@ -114,7 +115,7 @@ class GerenciadorDialogo
       end
 
       # Verificando se o livro será abertado naquele momento
-      if @dados.dig("livro")
+      if @dados.key?("livro")
         @livro = Livro.new
         @livro.livro_aberto = true
         if @livro.tutorial then  @livro.p_tutorial()  end
@@ -127,12 +128,15 @@ class GerenciadorDialogo
       end
 
       # Verificando se é para fazer a poção naquele momento
-      if @dados.dig("pocao")
+      if @dados.key?("pocao")
         @pocao = Pocao.new
         @p = @pocao.fazendo_pocao()
-        if @p == :final then  self.final_pocao_errada = true  end            
+        if @p == :final then  self.final = true  end            
         #puts "retorno: #{@p}"
       end
+
+      eventos(@dados)
+      finais()
 
       # Quando acabar as falas do dia passa para o próxima dia
       if self.i_fala == self.qtd_falas 
@@ -151,6 +155,60 @@ class GerenciadorDialogo
     
     
     private 
+
+    # Para cada dia do jogo, configura os eventos que irão ocorrer.
+    #
+    # @param dados [Hash] Passar a variável @dados do método sistema_dialogo.
+    #
+    # @return [void]
+    def eventos(dados)
+      case self.dia
+        when 1 # DIA 2
+          # Se a chave 'evento' existir no objeto atual e sua escolha for a resposta de índice 1
+          if dados.key?("evento") and self.i_escolha[0] == 1           
+            if dados["evento"] == "pagina"        # E se o evento for o de "pagina"
+              $save["pag_3"] = true               # Você desbloqueia a página 3
+              @i_evento = busca_evento("livro")
+              $roteiro["dias"][self.dia][self.i_fala + @i_evento]["livro"] = true
+            # Se o evento for o "errar base"
+            elsif dados["evento"] == "errar base"
+              $save["pode_errar_pocao"] = false   # Você não poderá errar nenhuma etapa da poção
+              self.evento = dados["evento"]
+            end
+          end
+        when 2 # DIA 3
+
+        when 3 # DIA 4
+        
+        when 4 # DIA 5
+      end
+    end
+
+    # Verifica se determinada chave existe dentro do objeto.
+    #
+    # @param chave [String] Chave que será buscada no objeto.
+    #
+    # @return [Integer] Retorna o índice do objeto em que a chave está.
+    def busca_evento(chave)
+      @i = 1
+      while $roteiro["dias"][self.dia][self.i_fala + @i].key?(chave) == false
+        @i += 1
+      end
+      return @i
+    end
+
+    # Atribui um final específico com base no evento.
+    #
+    # @return [void]
+    def finais()
+      if self.final
+        if self.evento == "errar base"
+          $efeitos.maquina_texto($roteiro["finais"][1])
+        else
+          $efeitos.maquina_texto($roteiro["finais"][0])
+        end
+      end
+    end
 
     # Pega o índice da mensagem que o jogador escolheu e atribui ao atributo self.i_escolha.
     #

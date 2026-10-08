@@ -8,13 +8,15 @@ using Rainbow
 class Pocao
   attr_accessor :etapa
   attr_accessor :pocao_atual
+  attr_accessor :chances
   attr_accessor :pode_errar
 
   def initialize()
     @prompt = TTY::Prompt.new
     self.etapa = 2
     self.pocao_atual = $save["pocao_atual"]
-    self.pode_errar = 2
+    self.chances = $save["chances"]
+    self.pode_errar = $save["pode_errar_pocao"]
   end
 
   # Puzzle das poções. Abre as opções pro jogador responder e selecionar respostas da poção atual.
@@ -32,11 +34,15 @@ class Pocao
             self.etapa = 3
             fazendo_pocao()
           else 
-            print "Você ".color("9046FF")
-            # Randomizando a mensagem do jogador falando que algo deu errado
-            print $efeitos.maquina_texto($roteiro["resp_erro"][rand(3)])
-            puts "\n"
-            abrir_livro_ou_fazer_pocao(5)       
+            if self.pode_errar
+              print "Você ".color("9046FF")
+              # Randomizando a mensagem do jogador falando que algo deu errado
+              print $efeitos.maquina_texto($roteiro["resp_erro"][rand(3)])
+              puts "\n"
+              abrir_livro_ou_fazer_pocao(5)       
+            else
+              return :final
+            end
           end
       when 3
           # Desocultando cursor
@@ -48,11 +54,15 @@ class Pocao
             self.etapa = 4
             fazendo_pocao()
           else 
-            print "Você ".color("9046FF")
-            # Randomizando a mensagem do jogador falando que algo deu errado
-            print $efeitos.maquina_texto($roteiro["resp_erro"][rand(3)])
-            puts "\n"
-            abrir_livro_ou_fazer_pocao(5)    
+            if self.pode_errar
+              print "Você ".color("9046FF")
+              # Randomizando a mensagem do jogador falando que algo deu errado
+              print $efeitos.maquina_texto($roteiro["resp_erro"][rand(3)])
+              puts "\n"
+              abrir_livro_ou_fazer_pocao(5)  
+            else
+              return :final
+            end
           end   
       when 4 
           # Ocultando cursor
@@ -101,32 +111,40 @@ class Pocao
               return
             # Resposta correta, porém combinação errada
             else
-              self.pode_errar -= 1
-              # Você errou a combinação das poções duas vezes
-              if self.pode_errar == 0
-                puts $efeitos.maquina_texto($roteiro["finais"][0])
+              if self.pode_errar
+                self.chances -= 1
+                # Você errou a combinação das poções duas vezes (gastou suas duas chances)
+                if self.chances == 0
+                  #puts $efeitos.maquina_texto($roteiro["finais"][0])
+                  return :final
+                end
+
+                # Você errou a combinação das poções uma vez
+                print "Você ".color("9046FF")
+                # Randomizando a mensagem do jogador falando que a combinação das poções está errada
+                print $efeitos.maquina_texto($roteiro["resp_c_erro"][rand(3)])
+                puts "\n"
+                sleep(0.6)
+                print "Você ".color("9046FF")
+                print $efeitos.maquina_texto("Gastei muito tempo fazendo uma poção errada, só tenho tempo para tentar fazer mais uma poção completa.")
+                puts "\n"
+                
+                abrir_livro_ou_fazer_pocao(10)  
+              else
                 return :final
               end
-
-              # Você errou a combinação das poções uma vez
-              print "Você ".color("9046FF")
-              # Randomizando a mensagem do jogador falando que a combinação das poções está errada
-              print $efeitos.maquina_texto($roteiro["resp_c_erro"][rand(3)])
-              puts "\n"
-              sleep(0.6)
-              print "Você ".color("9046FF")
-              print $efeitos.maquina_texto("Gastei muito tempo fazendo uma poção errada, só tenho tempo para tentar fazer mais uma poção completa.")
-              puts "\n"
-              
-              abrir_livro_ou_fazer_pocao(10)  
             end  
           # Resposta errada
           else
-            print "Você ".color("9046FF")
-            # Randomizando a mensagem do jogador falando que algo deu errado
-            print $efeitos.maquina_texto($roteiro["resp_erro"][rand(3)])
-            puts "\n"
-            abrir_livro_ou_fazer_pocao(7)    
+            if self.pode_errar
+              print "Você ".color("9046FF")
+              # Randomizando a mensagem do jogador falando que algo deu errado
+              print $efeitos.maquina_texto($roteiro["resp_erro"][rand(3)])
+              puts "\n"
+              abrir_livro_ou_fazer_pocao(7)    
+            else
+              return :final
+            end
           end       
     end
   end

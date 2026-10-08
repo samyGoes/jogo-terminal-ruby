@@ -18,7 +18,7 @@ class Livro
       self.pag_atual = 0
       self.livro_aberto = false
       self.altura_pag = 15
-      self.pag_3 = false
+      self.pag_3 = $save["pag_3"]
       self.tutorial = $save["livro_tutorial"]
     end
 
