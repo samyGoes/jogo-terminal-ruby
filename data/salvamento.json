@@ -6,5 +6,6 @@
   "pag_3": false,
   "pocao_atual": 0,
   "pode_errar_pocao": true,
-  "chances": 2
+  "chances": 2,
+  "finais_coletados": []
 }

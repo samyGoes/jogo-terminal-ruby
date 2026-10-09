@@ -6,12 +6,6 @@ require "tty-font"
 require_relative "Pocao"
 require_relative "Livro"
 
-caminho_r = File.expand_path("../../data/roteiro.json", __dir__)
-$roteiro = JSON.load_file(caminho_r)
-
-caminho_s = File.expand_path("../../data/salvamento.json", __dir__)
-$save = JSON.load_file(caminho_s)
-
 class GerenciadorDialogo
     attr_accessor :dia
     attr_accessor :nome
@@ -203,9 +197,11 @@ class GerenciadorDialogo
     def finais()
       if self.final
         if self.evento == "errar base"
-          $efeitos.maquina_texto($roteiro["finais"][1])
+          $efeitos.maquina_texto($roteiro["finais"][1][1])
+          $save["finais_coletados"].push($roteiro["finais"][1][0])
         else
-          $efeitos.maquina_texto($roteiro["finais"][0])
+          $efeitos.maquina_texto($roteiro["finais"][0][1])
+          $save["finais_coletados"].push($roteiro["finais"][0][0])
         end
       end
     end

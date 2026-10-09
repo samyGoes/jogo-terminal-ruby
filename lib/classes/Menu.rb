@@ -3,9 +3,16 @@ require "tty-prompt"
 require "rainbow/refinement"
 using Rainbow
 require "io/console"
+require "json"
 require_relative "GerenciadorDialogo"
 require_relative "../modules/Efeitos"
 $efeitos = include Efeitos
+
+caminho_r = File.expand_path("../../data/roteiro.json", __dir__)
+$roteiro = JSON.load_file(caminho_r)
+
+caminho_s = File.expand_path("../../data/salvamento.json", __dir__)
+$save = JSON.load_file(caminho_s)
 
 class Menu
   attr_accessor :voltar
@@ -50,15 +57,20 @@ class Menu
           # Pega a tecla apertada
           @caractere = STDIN.getch
           # Se clicar enter ou espaço chama o gerenciador de diálogo
-          if @caractere == "\r" or @caractere == " " and @dialogo.final == false
-            @dialogo.sistema_dialogo()
-          end          
+          if @dialogo.final == false
+            if @caractere == "\r" or @caractere == " "
+              @dialogo.sistema_dialogo()
+            end          
 
-          # Se clicar s encerra a execução do jogo (apenas para facilitar na hora de testar)
-          if @caractere == "s"
-            break
-          end
+            # Se clicar s encerra a execução do jogo (apenas para facilitar na hora de testar)
+            if @caractere == "s"
+              break
+            end    
+          else
+            break           
+          end     
         end
+        tela_menu()
       when "continuar"
         puts "Escolhi continuar"
       when "linguagem"
@@ -82,8 +94,20 @@ class Menu
   def printa_finais()
     IO.console.cursor_up(9)
     $efeitos.limpa_linhas(false, 9) 
-    puts "Esc para voltar ao menu".color("858585")
-    puts "finais"
+    puts "Esc para voltar ao menu\n".color("858585")
+    
+    $efeitos.maquina_texto(@font.write("  Finais").color("7209b7"), 0.0009 , false)
+    @i = 0
+
+    ($roteiro["finais"].length).times do
+      if $save["finais_coletados"].include?($roteiro["finais"][@i][0])
+        puts $roteiro["finais"][@i][0].color("7209b7") + "\n"
+      else
+        puts $roteiro["finais"][@i][0].color("858585") + "\n"
+      end
+      @i += 1 
+    end
+    
     return
   end
 
