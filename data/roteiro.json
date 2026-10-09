@@ -6,9 +6,9 @@
   "resp_c_erro": ["Ah, eu fiz a poção errada.", "Não era essa a poção que eu devia ter feito...", "...Combinei as poções erradas."],
 
   "finais": [
-    "Você gastou tempo de mais fazendo poções erradas e percebeu que não conseguiria fazer todas a tempo. Você resolveu cancelar a encomenda.",
-    "Sua irmã acabou errando a base. Você tentou fazer a poção sem nenhum erro, mas não conseguiu.",
-    ""
+    ["burro", "Você gastou tempo de mais fazendo poções erradas e percebeu que não conseguiria fazer todas a tempo. Você resolveu cancelar a encomenda."],
+    ["paia", "Sua irmã acabou errando a base. Você tentou fazer a poção sem nenhum erro, mas não conseguiu."],
+    ["bom", "final aaa"]
   ],
   "dias": [
     [
