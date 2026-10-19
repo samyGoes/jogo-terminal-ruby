@@ -62,5 +62,36 @@ module Efeitos
     # Subindo todas as linhas
     IO.console.cursor_up(qtd)
   end
+
+  # Calcula quantas colunas serão preenchidas de espaços em branco para que o texto seja printado no meio do terminal (não printa). 
+  #
+  # @param [String] txt Texto que deseja calcular.
+  #
+  # @param [Boolean] font Caso esteja usando a gem Font. Por padrão é true.
+  #
+  # @return [String] Retorna a quantidade de espaços.
+  def espacos_ate_o_meio(txt, font = true)
+    @centro_tela = IO.console.winsize[1] / 2
+    @espacos = ""
+  
+    # Se estiver usando uma fonte
+    if font 
+      @altura_font = 8
+      @largura_font = (txt.length / @altura_font).ceil
+      @centro_txt = @largura_font / 2     
+    else  
+      @centro_txt = txt.length / 2  
+    end
+    
+    # - 1 por causa da barra de rolagem do temrinal
+    @p_meio = @centro_tela - @centro_txt - 1
+
+    @p_meio.times do
+      @espacos += " "
+    end
+
+    return @espacos
+  end
+
 end
 

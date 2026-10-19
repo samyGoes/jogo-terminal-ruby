@@ -26,6 +26,7 @@ class GerenciadorDialogo
       self.i_escolha = []
       self.final = false
       self.dia_1 = true
+      @espacos = $efeitos.espacos_ate_o_meio(@font.write("DIA   #{(self.dia + 1).to_s}"))
     end
 
     # Sistema gerenciador de diálogo.
@@ -35,11 +36,11 @@ class GerenciadorDialogo
       @dados = $roteiro["dias"][self.dia][self.i_fala]
 
       if self.dia_1
-        $efeitos.maquina_texto(@font.write("  DIA    " + (self.dia + 1).to_s).color("7209b7"), 0.0009 , false)
+        $efeitos.maquina_texto(@font.write("#{@espacos}DIA    " + (self.dia + 1).to_s).color("7209b7"), 0.0009 , false)
         self.dia_1 = false
       end
 
-      # Atribuindo vo valores contidos nas chaves "nome" e "mensagem" aos atributos "nome" e "mensagem"
+      # Atribuindo os valores contidos nas chaves "nome" e "mensagem" aos atributos "nome" e "mensagem"
       self.nome, self.mensagem = @dados.values_at("nome", "mensagem")
 
       # PRINTANDO A MENSAGEN E OS NOMES
@@ -108,7 +109,7 @@ class GerenciadorDialogo
         puts "\n"
       end
 
-      # Verificando se o livro será abertado naquele momento
+      # Verificando se o livro será aberto naquele momento
       if @dados.key?("livro")
         @livro = Livro.new
         @livro.livro_aberto = true
@@ -132,12 +133,12 @@ class GerenciadorDialogo
       eventos(@dados)
       finais()
 
-      # Quando acabar as falas do dia passa para o próxima dia
+      # Quando acabar as falas do dia passa para o próximo dia
       if self.i_fala == self.qtd_falas 
         self.dia += 1   
         self.i_fala = 0
         sleep(0.8)
-        $efeitos.maquina_texto(@font.write("  DIA   " + (self.dia + 1).to_s).color("7209b7"), 0.0009 , false)
+        $efeitos.maquina_texto(@font.write("#{@espacos}DIA    #{(self.dia + 1).to_s}").color("7209b7"), 0.0009 , false)
       # Ainda não acabou as falas do dia, então passa pra próxima fala 
       else
         self.i_fala += 1
