@@ -11,58 +11,68 @@ class Pocao
   attr_accessor :chances
   attr_accessor :pode_errar
 
-  def initialize()
+  def initialize(irma)
     @prompt = TTY::Prompt.new
     self.etapa = 2
     self.pocao_atual = $save["pocao_atual"]
     self.chances = $save["chances"]
     self.pode_errar = $save["pode_errar_pocao"]
+    @irma = irma
   end
 
   # Puzzle das poções. Abre as opções pro jogador responder e selecionar respostas da poção atual.
   #
   # @return [String]
   def fazendo_pocao()
+    @pocao = $livro["pocoes"][0][self.pocao_atual]
     case self.etapa
+      when 1
+        if @pocao.key?("etapa-1")    
+          @resp = @prompt.select("#{@pocao["nome"]} [Base]: #{@pocao["etapa-1"]["base"]}", 
+                                  @pocao["etapa-1"]["opcoes_resp"],
+                                  cycle: true,
+                                  help: "Use as setas",
+                                  active_color: :white)
+          puts "\n"
+          # Se a resposta do jogador for igual a resposta do puzzle
+          if @resp == @pocao["etapa-1"]["resp"]
+            self.etapa = 2
+            fazendo_pocao()
+          else
+           verifica_pode_errar()
+          end
+        end
       when 2
           # Desocultando cursor
           $stdout.print "\e[?25h"
-          @resp = @prompt.ask("#{$livro["pocoes"][0][self.pocao_atual]["nome"]} [2° Etapa]:")
+          @resp = @prompt.ask("#{@pocao["nome"]} [2° Etapa]:")
           puts "\n"
           # Se a resposta do jogador for igual a resposta do puzzle
-          if @resp.to_i == $livro["pocoes"][0][self.pocao_atual]["resp"][0]
-            self.etapa = 3
+          if @resp.to_i == @pocao["resp"][0]
+            if @irma.faz_etapa == 3
+              self.etapa = 4
+            else
+              self.etapa = 3
+            end         
             fazendo_pocao()
           else 
-            if self.pode_errar
-              print "Você ".color("9046FF")
-              # Randomizando a mensagem do jogador falando que algo deu errado
-              print $efeitos.maquina_texto($roteiro["resp_erro"][rand(3)])
-              puts "\n"
-              abrir_livro_ou_fazer_pocao(5)       
-            else
-              return :final
-            end
+            verifica_pode_errar()
           end
       when 3
           # Desocultando cursor
           $stdout.print "\e[?25h"
-          @resp = @prompt.ask("#{$livro["pocoes"][0][self.pocao_atual]["nome"]} [3° Etapa]:")
+          @resp = @prompt.ask("#{@pocao["nome"]} [3° Etapa]:")
           puts "\n"
           # Se a resposta do jogador for igual a resposta do puzzle
-          if @resp.to_i == $livro["pocoes"][0][self.pocao_atual]["resp"][1]
-            self.etapa = 4
+          if @resp.to_i == @pocao["resp"][1]
+            if @irma.faz_etapa == 4
+              return
+            else
+              self.etapa = 4
+            end         
             fazendo_pocao()
           else 
-            if self.pode_errar
-              print "Você ".color("9046FF")
-              # Randomizando a mensagem do jogador falando que algo deu errado
-              print $efeitos.maquina_texto($roteiro["resp_erro"][rand(3)])
-              puts "\n"
-              abrir_livro_ou_fazer_pocao(5)  
-            else
-              return :final
-            end
+            verifica_pode_errar()
           end   
       when 4 
           # Ocultando cursor
@@ -105,6 +115,7 @@ class Pocao
             if verifica_pocao_final(@p)
               self.pocao_atual += 1
               $save["pocao_atual"] = self.pocao_atual
+              self.etapa = 2
   
               IO.console.cursor_up(8)
               $efeitos.limpa_linhas(false, 8)
@@ -115,7 +126,6 @@ class Pocao
                 self.chances -= 1
                 # Você errou a combinação das poções duas vezes (gastou suas duas chances)
                 if self.chances == 0
-                  #puts $efeitos.maquina_texto($roteiro["finais"][0])
                   return :final
                 end
 
@@ -136,15 +146,7 @@ class Pocao
             end  
           # Resposta errada
           else
-            if self.pode_errar
-              print "Você ".color("9046FF")
-              # Randomizando a mensagem do jogador falando que algo deu errado
-              print $efeitos.maquina_texto($roteiro["resp_erro"][rand(3)])
-              puts "\n"
-              abrir_livro_ou_fazer_pocao(7)    
-            else
-              return :final
-            end
+            verifica_pode_errar()
           end       
     end
   end
@@ -160,7 +162,7 @@ class Pocao
   def abrir_livro_ou_fazer_pocao(linhas)
     # Ocultando o cursor
     $stdout.print "\e[?25l"
-    @resp = @prompt.select("O que deseja?", "Abrir o livro", "Preparar a poção",
+    @resp = @prompt.select("O que deseja?", "Abrir o livro", "Fazer novamente a poção",
                             cycle: true,
                             help: "Use as setas",
                             active_color: :white)
@@ -179,7 +181,7 @@ class Pocao
           @livro.mexe_no_livro()        
         end 
         fazendo_pocao()
-      when "Preparar a poção" then  fazendo_pocao()
+      when "Fazer novamente a poção" then  fazendo_pocao()
     end
   end
 
@@ -194,6 +196,21 @@ class Pocao
     end
     
     return false  
+  end
+
+  # Verifica se o jogador pode errar a resposta.
+  #
+  # @return [Symbol] Retorna :final caso o jogador não tenha mais chances. 
+  def verifica_pode_errar()
+    if self.pode_errar
+      print "Você ".color("9046FF")
+      # Randomizando a mensagem do jogador falando que algo deu errado
+      print $efeitos.maquina_texto($roteiro["resp_erro"][rand(3)])
+      puts "\n"
+      abrir_livro_ou_fazer_pocao(5)       
+    else
+      return :final
+    end
   end
 
 end

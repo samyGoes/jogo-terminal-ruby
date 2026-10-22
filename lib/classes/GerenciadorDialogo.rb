@@ -5,6 +5,7 @@ require "tty-prompt"
 require "tty-font"
 require_relative "Pocao"
 require_relative "Livro"
+require_relative "Irma"
 
 class GerenciadorDialogo
     attr_accessor :dia
@@ -27,6 +28,9 @@ class GerenciadorDialogo
       self.final = false
       self.dia_1 = true
       @espacos = $efeitos.espacos_ate_o_meio(@font.write("DIA   #{(self.dia + 1).to_s}"))
+      @irma = Irma.new
+      @livro = Livro.new
+      @pocao = Pocao.new(@irma)
     end
 
     # Sistema gerenciador de diálogo.
@@ -104,14 +108,17 @@ class GerenciadorDialogo
       elsif @dados.key?("opcoes_i")
         # IRMÃ RESPONDE DE ACORDO COM A SUA ESCOLHA ANTERIOR
         print self.nome.color("5DB7DE") + " "
+        # Para quando só tiver uma resposta independente da escolha anterior do jogador
+        if @dados["opcoes_i"][self.i_escolha[0]][self.i_escolha[1]].nil? 
+          self.i_escolha[1] = 0  
+        end
         self.mensagem = @dados["opcoes_i"][self.i_escolha[0]][self.i_escolha[1]]
         $efeitos.maquina_texto(self.mensagem)
         puts "\n"
       end
 
       # Verificando se o livro será aberto naquele momento
-      if @dados.key?("livro")
-        @livro = Livro.new
+      if @dados.key?("livro") and @dados["livro"]
         @livro.livro_aberto = true
         if @livro.tutorial then  @livro.p_tutorial()  end
 
@@ -123,11 +130,9 @@ class GerenciadorDialogo
       end
 
       # Verificando se é para fazer a poção naquele momento
-      if @dados.key?("pocao")
-        @pocao = Pocao.new
+      if @dados.key?("pocao") and @dados["pocao"]
         @p = @pocao.fazendo_pocao()
-        if @p == :final then  self.final = true  end            
-        #puts "retorno: #{@p}"
+        if @p == :final then  self.final = true  end         
       end
 
       eventos(@dados)
@@ -159,23 +164,73 @@ class GerenciadorDialogo
     def eventos(dados)
       case self.dia
         when 1 # DIA 2
-          # Se a chave 'evento' existir no objeto atual e sua escolha for a resposta de índice 1
+          # Se você escolheu pegar a página 3
           if dados.key?("evento") and self.i_escolha[0] == 1           
-            if dados["evento"] == "pagina"        # E se o evento for o de "pagina"
-              $save["pag_3"] = true               # Você desbloqueia a página 3
+            if dados["evento"] == "pagina"
+              # Você desbloqueia a página 3
+              @livro.pag_3 = true
+              # O livro vai abrir naquele momento só se você escolheu pegar a página 3               
               @i_evento = busca_evento("livro")
               $roteiro["dias"][self.dia][self.i_fala + @i_evento]["livro"] = true
             # Se o evento for o "errar base"
             elsif dados["evento"] == "errar base"
-              $save["pode_errar_pocao"] = false   # Você não poderá errar nenhuma etapa da poção
+              # Você não poderá errar nenhuma etapa da poção
+              @pocao.pode_errar = false  
               self.evento = dados["evento"]
             end
           end
         when 2 # DIA 3
-
+          # Se você resolveu dar a chance a sua irmã de fazer alguma etapa da poção
+          if dados.key?("evento") and self.i_escolha[0] == 0         
+            if dados["evento"] == "fazer etapa"       
+              # E essa etapa for a segunda etapa
+              if self.i_escolha[1] == 0    
+                # Ela vai errar e a poção terá que ser refeita, você não poderá errar.
+                @pocao.pode_errar = false
+              end
+              # E essa etapa for a terceira etapa 
+              if self.i_escolha[1] == 1
+                @irma.faz_etapa = 3      
+                @irma.conseguiu_fazer_etapa = true
+              # E essa etapa for a quarta etapa 
+              elsif self.i_escolha[1] == 2
+                @irma.faz_etapa = 4
+                @irma.conseguiu_fazer_etapa = true
+              end                    
+            end
+          # Você não quis deixar sua irmã fazer nenhuma das etapas
+          else
+            @irma.pirraca = true
+          end
         when 3 # DIA 4
-        
+          # Você vai ter que fazer a base
+          @pocao.etapa = 1
+          # Zerando o faz_etapa porque a irmã não vai fazer nenhuma
+          @irma.faz_etapa = 0
         when 4 # DIA 5
+          if dados.key?("evento") 
+            if dados["evento"] == "irma fazer pocao"
+              if @irma.fazer_pocao_completa() == 1
+                # Ela vai pedir para fazer uma poção completa
+                self.i_escolha[0] = 1
+              else
+                # Ela não vai pedir para fazer uma poção completa
+                self.i_escolha[0] = 0
+              end
+            elsif dados["evento"] == "voce fazer pocao"     
+              if self.i_escolha[0] == 1          
+                case self.i_escolha[1] 
+                  when 0  # Caso o jogador escolha confiar a poção completa a irmã
+                    @i_evento = busca_evento("pocao")
+                    $roteiro["dias"][self.dia][self.i_fala + @i_evento]["pocao"] = nil        
+                  when 1  # Caso o jogador queira que a irmã faça apenas a base
+                    @pocao.etapa = 2            
+                  when 2  # Caso o jogador queira fazer a poção completa
+                    @pocao.etapa = 1
+                end
+              end
+            end
+          end
       end
     end
 

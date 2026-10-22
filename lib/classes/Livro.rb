@@ -137,6 +137,7 @@ class Livro
       if @tecla == "\e" 
         self.livro_aberto = false
         $efeitos.limpa_linhas(self.tutorial, self.altura_pag + 2)
+        self.pag_atual = 0
       
       # Voltando uma página
       elsif @tecla == "a" 
