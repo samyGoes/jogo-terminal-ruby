@@ -224,6 +224,74 @@
         "nome": "Você",
         "mensagem": "Consegui."
       }
+    ],
+    [
+      {
+        "nome": "Irmã",
+        "mensagem": "Eu quero fazer alguma etapa."
+      },
+      {
+        "nome": "Você",
+        "escolhas": ["Tem certeza que dá conta de fazer a base e mais uma etapa?", "Não, melhor deixar como está."]
+      },
+      {
+        "nome": "Irmã",
+        "respostas": ["Dou, eu quero tentar.", "...Ok"]
+      },
+      {
+        "nome": "Você",
+        "opcoes_j": [
+          ["Faça a segunda etapa.", "Faça a terceira etapa.", "Faça a poção complementar."],
+          ["Não fique emburrada.", "Essa encomenda é importante, não faça birra."]
+        ],
+        "evento": "fazer etapa",
+        "livro": true
+      },
+      {
+        "nome": "Irmã",
+        "opcoes_i": [
+          ["Certo"],
+          ["Não to.", "Não to fazendo birra."]
+        ],
+        "pocao": true
+      }
+    ],
+    [
+      {
+        "nome": "Você",
+        "mensagem": "aa",
+        "livro": true
+      },
+      {
+        "nome": "Irmã",
+        "mensagem": "a",
+        "pocao": true
+      }
+    ],
+    [
+      {
+        "nome": "Você",
+        "mensagem": "a",
+        "evento": "irma fazer pocao"
+      },
+      {
+        "nome": "Irmã",
+        "respostas": ["Hoje meus planos era perguntar se eu poderia fazer uma poção completa, mas eu não consegui fazer nem a segunda etapa. Então esquece...", 
+                      "Então, eu consegui fazer tanto a base como uma das etapas certo? Eu queria fazer uma poção completa hoje."]
+      },
+      {
+        "nome": "Você",
+        "opcoes_j": [
+          ["É, não daria certo.", "Quem sabe numa encomenda menos importante."],
+          ["Tudo bem, vou confiar essa a você.", "Fora de questão, faça a base dessa e eu farei o resto.", "Na verdade eu ia dizer algo parecido, eu vou fazer esta completa."]
+        ],
+        "evento": "voce fazer pocao"
+      },
+      {
+        "nome": "Você",
+        "mensagem": "a",
+        "pocao": true
+      }
     ]
   ]
 }

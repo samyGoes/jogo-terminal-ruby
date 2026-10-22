@@ -1,5 +1,5 @@
 {
-    "encomenda": ["Poção de cura de madeira", "Poção de cura da água"],
+    "encomenda": ["Poção de cura de madeira", "Poção de cura da água", "Poção de cura da água", "Poção de cura da água", "Poção de cura da água"],
     "pocoes": [
        [
         {
@@ -17,10 +17,34 @@
             "resp": [7, 102]
         },
         {
-            "nome": "Poção de restauração",
+            "nome": "Poção de amor",
             "etapa-2": [" 34 ", " 3 ", " 5 "],
             "etapa-3": " ABHJ! ",
             "cores": ["dc6771", "89023e", "89023e", "13505b", "68d6f8"]
+        },
+        {
+            "nome": "Poção de sono",
+            "etapa-1": {
+                "base": "d  f  i",
+                "opcoes_resp": ["2  3", "1  5", "3  2", "7  1", "2  5", "9  3"],
+                "resp": "2  3"
+            },
+            "etapa-2": [" 34 ", " 3 ", " 5 "],
+            "etapa-3": " ABHJ! ",
+            "cores": ["dc6771", "89023e", "89023e", "13505b", "68d6f8"],
+            "resp": [7, 102]
+        },
+        {
+            "nome": "Poção de água",
+             "etapa-1": {
+                "base": "s  w  a  h",
+                "opcoes_resp": ["2  3", "1  5", "3  2", "7  1", "2  5", "9  3"],
+                "resp": "2  3"
+            },
+            "etapa-2": [" 34 ", " 3 ", " 5 "],
+            "etapa-3": " ABHJ! ",
+            "cores": ["dc6771", "89023e", "89023e", "13505b", "68d6f8"],
+            "resp": [7, 102]
         }
        ],
        [
